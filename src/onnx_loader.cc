@@ -8,14 +8,14 @@
 namespace tensor_compiler {
 
 onnx::ModelProto LoadOnnxModel(const std::string& path) {
-    std::ifstream in{path, std::ios::binary};
-    if (!in) {
+    std::ifstream fin{path, std::ios::binary};
+    if (!fin) {
         throw std::runtime_error("Cannot open file: " + path);
     }
 
-    google::protobuf::io::IstreamInputStream zcis{&in};
+    google::protobuf::io::IstreamInputStream is{&fin};
     onnx::ModelProto model;
-    if (!model.ParseFromZeroCopyStream(&zcis)) {
+    if (!model.ParseFromZeroCopyStream(&is)) {
         throw std::runtime_error("Failed to parse ONNX");
     }
 
