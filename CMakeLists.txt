@@ -11,13 +11,14 @@ find_package(Boost CONFIG REQUIRED)
 
 add_executable(run
     src/main.cc
-    src/onnx_loader.cc
-    src/parse_cli.cc
+    src/frontend/onnx_loader.cc
+    src/cli/parse_cli.cc
 )
 
 target_include_directories(run
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/include/cli
+        ${CMAKE_SOURCE_DIR}/include/frontend
 )
 
 target_link_libraries(run
