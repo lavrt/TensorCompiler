@@ -5,7 +5,7 @@
 
 #include <boost/program_options.hpp>
 
-namespace tensor_compiler {
+namespace tensor_compiler::cli {
 
 std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char** argv) {
     namespace po = boost::program_options;
@@ -51,4 +51,4 @@ std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char
     };
 }
 
-} // namespace tensor_compiler
+} // namespace tensor_compiler::cli

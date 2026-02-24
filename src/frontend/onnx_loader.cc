@@ -5,7 +5,7 @@
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
-namespace tensor_compiler {
+namespace tensor_compiler::frontend {
 
 onnx::ModelProto LoadOnnxModel(const std::string& path) {
     std::ifstream fin{path, std::ios::binary};
@@ -22,4 +22,4 @@ onnx::ModelProto LoadOnnxModel(const std::string& path) {
     return model;
 }
 
-} // namespace tensor_compiler
+} // namespace tensor_compiler::frontend
