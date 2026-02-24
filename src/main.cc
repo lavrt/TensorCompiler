@@ -33,15 +33,17 @@ static void PrintGraphSummary(const onnx::ModelProto& model) {
     }
 }
 
+namespace tc = tensor_compiler;
+
 int main(int argc, const char** argv) {
     try {
-        auto [program, cfg] = tensor_compiler::cli::ParseCli(argc, argv);
-        if (program.mode == tensor_compiler::cli::CliMode::kExit) {
+        auto [program, cfg] = tc::cli::ParseCli(argc, argv);
+        if (program.mode == tc::cli::CliMode::kExit) {
             std::cout << program.exit_action.exit_text;
             return program.exit_action.exit_code;
         }
 
-        onnx::ModelProto model = tensor_compiler::frontend::LoadOnnxModel(cfg.value().onnx_filename);
+        onnx::ModelProto model = tc::frontend::LoadOnnxModel(cfg.value().onnx_filename);
 
         PrintGraphSummary(model);
 
