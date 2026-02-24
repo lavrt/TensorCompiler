@@ -21,13 +21,12 @@ std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char
             po::value<std::string>()->required(),
             "path to onnx file"
         );
-    
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
 
     std::ostringstream help_text;
     help_text << desc;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
 
     if (vm.count("help")) {
         return {
@@ -41,6 +40,8 @@ std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char
             std::nullopt
         };
     }
+
+    po::notify(vm);
 
     return {
         CliResult{},
