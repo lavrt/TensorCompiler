@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "onnx_importer.hpp"
 #include "onnx_loader.hpp"
 #include "parse_cli.hpp"
 
@@ -45,7 +46,35 @@ int main(int argc, const char** argv) {
 
         onnx::ModelProto model = tc::frontend::LoadOnnxModel(cfg.value().onnx_filename);
 
-        PrintGraphSummary(model);
+        tc::ir::Graph graph = tc::frontend::ImportOnnx(model.graph());
+
+        for (auto&& node : graph.nodes) {
+            std::cout
+                << node.name << "\n"
+                << "_______________________" << "\n"
+                << node.op_name << "\n";
+
+            std::cout << "inputs:\n";
+            for (auto&& in : node.inputs) {
+                std::cout << in << "\n";
+            }
+
+            std::cout << "outputs:\n";
+            for (auto&& in : node.outputs) {
+                std::cout << in << "\n";
+            }
+            std::cout << "_______________________\n";
+        }
+
+        for (auto&& value : graph.values) {
+            std::cout
+                << graph.value_by_name[value.name] << "\n"
+                << value.name << "\n"
+                << "_______________________" << "\n";
+
+        }
+
+        // PrintGraphSummary(model);
 
         return 0;
     } catch (const std::exception& e) {
