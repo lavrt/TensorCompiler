@@ -14,6 +14,7 @@ add_executable(run
     src/frontend/onnx_loader.cc
     src/frontend/onnx_importer.cc
     src/cli/parse_cli.cc
+    src/viz/graph_dump.cc
 )
 
 target_include_directories(run
@@ -21,6 +22,7 @@ target_include_directories(run
         ${CMAKE_SOURCE_DIR}/include/cli
         ${CMAKE_SOURCE_DIR}/include/frontend
         ${CMAKE_SOURCE_DIR}/include/ir
+        ${CMAKE_SOURCE_DIR}/include/viz
 )
 
 target_link_libraries(run
