@@ -1,7 +1,7 @@
 # TensorCompiler
 ```bash
 conan install . -of build -s build_type=Release --build=missing
-cmake --preset conan-release
+cmake --preset conan-release -DCMAKE_CXX_COMPILER=/usr/bin/g++-14
 cmake --build --preset conan-release -j
 ```
 
