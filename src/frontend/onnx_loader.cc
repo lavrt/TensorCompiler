@@ -13,9 +13,8 @@ onnx::ModelProto LoadOnnxModel(const std::string& path) {
         throw std::runtime_error("Cannot open file: " + path);
     }
 
-    google::protobuf::io::IstreamInputStream is{&fin};
     onnx::ModelProto model;
-    if (!model.ParseFromZeroCopyStream(&is)) {
+    if (google::protobuf::io::IstreamInputStream is{&fin}; !model.ParseFromZeroCopyStream(&is)) {
         throw std::runtime_error("Failed to parse ONNX");
     }
 
