@@ -6,33 +6,7 @@
 #include "onnx_importer.hpp"
 #include "onnx_loader.hpp"
 #include "parse_cli.hpp"
-
-static void PrintGraphSummary(const onnx::ModelProto& model) {
-    const auto& g = model.graph();
-
-    std::cout << "Graph name: " << g.name() << "\n";
-    std::cout << "Inputs: " << g.input_size()
-              << " Outputs: " << g.output_size()
-              << " Initializers: " << g.initializer_size()
-              << " Nodes: " << g.node_size() << "\n\n";
-
-    for (int i = 0; i < g.node_size(); ++i) {
-        const auto& n = g.node(i);
-
-        std::cout << "Node #" << i << ": op_type=" << n.op_type();
-        if (!n.name().empty()) std::cout << " name=" << n.name();
-        std::cout << "\n  inputs: ";
-        for (const auto& in : n.input()) std::cout << in << " ";
-        std::cout << "\n  outputs: ";
-        for (const auto& out : n.output()) std::cout << out << " ";
-        std::cout << "\n";
-
-        for (const auto& a : n.attribute()) {
-            std::cout << "  attr: " << a.name() << " type=" << a.type() << "\n";
-        }
-        std::cout << "\n";
-    }
-}
+#include "graph_dump.hpp"
 
 namespace tc = tensor_compiler;
 
@@ -45,36 +19,10 @@ int main(int argc, const char** argv) {
         }
 
         onnx::ModelProto model = tc::frontend::LoadOnnxModel(cfg.value().onnx_filename);
-
         tc::ir::Graph graph = tc::frontend::ImportOnnx(model.graph());
 
-        for (auto&& node : graph.nodes) {
-            std::cout
-                << node.name << "\n"
-                << "_______________________" << "\n"
-                << node.op_name << "\n";
-
-            std::cout << "inputs:\n";
-            for (auto&& in : node.inputs) {
-                std::cout << in << "\n";
-            }
-
-            std::cout << "outputs:\n";
-            for (auto&& in : node.outputs) {
-                std::cout << in << "\n";
-            }
-            std::cout << "_______________________\n";
-        }
-
-        for (auto&& value : graph.values) {
-            std::cout
-                << graph.value_by_name[value.name] << "\n"
-                << value.name << "\n"
-                << "_______________________" << "\n";
-
-        }
-
-        // PrintGraphSummary(model);
+        std::ofstream os{"graph.dot"};
+        os << tc::viz::GraphDump(graph);
 
         return 0;
     } catch (const std::exception& e) {
