@@ -39,10 +39,11 @@ struct Node final {
 
     AttrMap attrs;
 
-    Node(std::string op_name_,
-         std::vector<ValueId> in = {},
-         std::vector<ValueId> out = {},
-         std::string name_ = {})
+    Node(std::string name_,
+         std::string op_name_,
+         std::vector<ValueId>&& in,
+         std::vector<ValueId>&& out
+         )
         : name(std::move(name_)),
           op_name(std::move(op_name_)),
           op(ParseOpCode(op_name)),
