@@ -74,7 +74,7 @@ struct Graph final {
         values.at(id).is_initializer = true;
     }
 
-    NodeId AddNode(Node node) {
+    NodeId AddNode(Node&& node) {
         NodeId nid = nodes.size();
         nodes.emplace_back(std::move(node));
 
@@ -91,6 +91,11 @@ struct Graph final {
         }
 
         return nid;
+    }
+
+    NodeId AddNode(const Node& node) {
+        Node tmp = node;
+        return AddNode(std::move(tmp));
     }
 };
 
