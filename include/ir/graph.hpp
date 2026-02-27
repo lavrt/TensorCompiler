@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "node.hpp"
+#include "tensor.hpp"
 #include "value.hpp"
 
 namespace tensor_compiler::ir {
@@ -17,6 +18,8 @@ struct Graph final {
     std::vector<Value> values;
 
     std::unordered_map<std::string, ValueId> value_by_name;
+
+    std::unordered_map<ValueId, TensorData> constants;
 
     std::vector<ValueId> graph_inputs;
     std::vector<ValueId> graph_outputs;

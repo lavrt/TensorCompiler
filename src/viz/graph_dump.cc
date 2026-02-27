@@ -2,8 +2,25 @@
 
 #include <format>
 #include <iomanip>
+#include <optional>
 #include <sstream>
 #include <string>
+
+namespace {
+
+std::string ToString(tensor_compiler::ir::DType dt) {
+    namespace tc = tensor_compiler;
+    switch (dt) {
+        case tc::ir::DType::kF32: return "float32";
+        case tc::ir::DType::kI64: return "int64";
+        case tc::ir::DType::kI32: return "int32";
+        case tc::ir::DType::kI8:  return "int8";
+        case tc::ir::DType::kU8:  return "uint8";
+        default: return "";
+    }
+}
+
+} // namespace
 
 namespace tensor_compiler::viz {
 
@@ -26,7 +43,15 @@ std::string GraphDump(const ir::Graph& g) {
         for (const auto& in : n.inputs) {
             const auto& v = g.values[in];
             if (v.is_initializer) {
-               label += "\\n" + v.name; 
+                const auto& td = g.constants.at(in);
+                label += "\\n" + v.name + " <";
+                for (size_t i = 0, ie = td.shape.size(); i != ie; ++i) {
+                    label += std::to_string(td.shape[i]);
+                    if (i != ie - 1) {
+                        label += ", ";
+                    }
+                }
+                label += ">, " + ToString(td.dtype);
             }
         }
 
