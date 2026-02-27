@@ -12,3 +12,7 @@ python3 make_onnx.py
 netron example.onnx
 deactivate
 ```
+
+```bash
+dot -Tpng graph.dot -o graph.png
+```
