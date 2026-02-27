@@ -11,7 +11,7 @@ std::string GraphDump(const ir::Graph& g) {
     std::stringstream ss;
 
     ss << "digraph G {\n"
-       << "  rankdir=LR;\n"
+       << "  rankdir=TB;\n"
        << "  node [shape=box, fontname=\"Helvetica\"];\n"
        << "  edge [fontname=\"Helvetica\"];\n\n";
     
@@ -20,7 +20,14 @@ std::string GraphDump(const ir::Graph& g) {
 
         std::string label = n.op_name;
         if (!n.name.empty()) {
-            label += (" \\n " + n.name);
+            label += std::format(" ({})", n.name);
+        }
+
+        for (const auto& in : n.inputs) {
+            const auto& v = g.values[in];
+            if (v.is_initializer) {
+               label += "\\n" + v.name; 
+            }
         }
 
         ss << std::format("  n{} ", i) << "[label=\"" << label << "\"];\n";
