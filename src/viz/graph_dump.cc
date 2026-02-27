@@ -20,11 +20,10 @@ std::string GraphDump(const ir::Graph& g) {
 
         std::string label = n.op_name;
         if (!n.name.empty()) {
-            label += std::format("\n{}", n.name);
+            label += (" \\n " + n.name);
         }
 
-        ss << std::format("  n{} ", i)
-           << "[label=" << std::quoted(label) << "];\n";
+        ss << std::format("  n{} ", i) << "[label=\"" << label << "\"];\n";
     }
     ss << "\n";
 
