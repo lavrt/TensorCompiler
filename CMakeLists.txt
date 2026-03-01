@@ -8,7 +8,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(protobuf CONFIG REQUIRED)
 find_package(ONNX CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
-find_package(GTest CONFIG REQUIRED)
 
 # tc_core -----------------------------------
 
@@ -52,26 +51,6 @@ target_link_libraries(run
 # tests -------------------------------------
 
 include(CTest)
-enable_testing()
-
-add_executable(tc_tests
-    tests/test_graph.cc
-    tests/test_importer.cc
-)
-
-target_link_libraries(tc_tests
-    PRIVATE
-        tc_core
-        GTest::gtest
-        GTest::gtest_main
-)
-
-target_compile_definitions(tc_tests
-    PRIVATE
-        TC_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
-)
-
-add_test(
-    NAME tc.tests
-    COMMAND tc_tests
-)
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
