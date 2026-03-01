@@ -8,6 +8,40 @@
 
 namespace {
 
+std::string ToString(const tensor_compiler::ir::AttrValue& v) {
+    using namespace tensor_compiler::ir;
+
+    if (const auto* p = std::get_if<std::int64_t>(&v)) {
+        return std::to_string(*p);
+    }
+    if (const auto* p = std::get_if<double>(&v)) {
+        return std::format("{}", *p);
+    }
+    if (const auto* p = std::get_if<std::string>(&v)) {
+        return *p;
+    }
+    if (const auto* p = std::get_if<std::vector<std::int64_t>>(&v)) {
+        std::string s = "[";
+        for (size_t i = 0; i < p->size(); ++i) {
+            s += std::to_string((*p)[i]);
+            if (i + 1 != p->size()) s += ", ";
+        }
+        s += "]";
+        return s;
+    }
+    if (const auto* p = std::get_if<std::vector<double>>(&v)) {
+        std::string s = "[";
+        for (size_t i = 0; i < p->size(); ++i) {
+            s += std::format("{}", (*p)[i]);
+            if (i + 1 != p->size()) s += ", ";
+        }
+        s += "]";
+        return s;
+    }
+
+    return "?";
+}
+
 std::string ToString(tensor_compiler::ir::DType dt) {
     namespace tc = tensor_compiler;
     switch (dt) {
@@ -52,6 +86,12 @@ std::string GraphDump(const ir::Graph& g) {
                     }
                 }
                 label += ">, " + ToString(td.dtype);
+            }
+        }
+
+        if (!n.attrs.empty()) {
+            for (const auto& [k, v] : n.attrs) {
+                label += "\\n" + k + "=" + ToString(v);
             }
         }
 

@@ -42,13 +42,15 @@ struct Node final {
     Node(std::string name_,
          std::string op_name_,
          std::vector<ValueId>&& in,
-         std::vector<ValueId>&& out
+         std::vector<ValueId>&& out,
+         AttrMap&& attrs_
          )
         : name(std::move(name_)),
           op_name(std::move(op_name_)),
           op(ParseOpCode(op_name)),
           inputs(std::move(in)),
-          outputs(std::move(out))
+          outputs(std::move(out)),
+          attrs(std::move(attrs_))
     {}
 };
 
