@@ -44,3 +44,8 @@ cmake --build --preset conan-release -j
 ./build/run --onnx model.onnx --dump graph.dot
 dot -Tpng graph.dot -o graph.png
 ```
+## Tests
+
+```bash
+ctest --preset conan-release --output-on-failure
+```
