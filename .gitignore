@@ -1,6 +1,7 @@
 build/
 .venv/
 .vscode/
+onnx_maker/
 
 CMakeUserPresets.json
 notes.txt
