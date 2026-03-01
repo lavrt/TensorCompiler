@@ -1,16 +1,41 @@
 # TensorCompiler
+
+A small educational tensor compiler project.  
+Current stage: read an ONNX model, build an internal IR (computational graph), and optionally dump it to GraphViz `.dot`.
+
+## Features (current)
+- Parse `.onnx` files (protobuf + ONNX)
+- Convert ONNX graph to internal IR (`ir::Graph`, `ir::Node`, `ir::Value`)
+- Track:
+  - graph inputs / outputs
+  - initializers (constants)
+  - producer/consumer links
+  - node attributes (`int`, `float`, `string`, `ints`, `floats`)
+- GraphViz dump to `.dot` (visualization)
+
+
+Supported ops (at least):
+- `Add`, `Mul`, `Conv`, `Relu`, `MatMul`, `Gemm`  
+(Other ops may appear and can be handled as `Unknown`.)
+
+## Requirements
+- Linux
+- CMake >= 3.20
+- Conan 2
+- GCC 14 (`/usr/bin/g++-14`) for building this project
+
+## Build
+From the project root:
 ```bash
 conan install . -of build -s build_type=Release --build=missing
 cmake --preset conan-release -DCMAKE_CXX_COMPILER=/usr/bin/g++-14
 cmake --build --preset conan-release -j
 ```
 
+## Run
 ```bash
-cd ./onnx_maker/
-source .venv/bin/activate
-python3 make_onnx.py
-netron example.onnx
-deactivate
+./build/run --help
+./build/run --input model.onnx
 ```
 
 ```bash

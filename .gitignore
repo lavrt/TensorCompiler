@@ -3,5 +3,6 @@ build/
 .vscode/
 
 CMakeUserPresets.json
+notes.txt
 *.dot
 *.png
