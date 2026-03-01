@@ -20,6 +20,11 @@ std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char
             "onnx,o",
             po::value<std::string>()->required(),
             "path to onnx file"
+        )
+        (
+            "dump,d",
+            po::value<std::string>()->default_value("graph.dot"),
+            "path to dump file"
         );
 
     std::ostringstream help_text;
@@ -46,7 +51,8 @@ std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char
     return {
         CliResult{},
         ProgramConfig{
-            .onnx_filename = vm["onnx"].as<std::string>()
+            .onnx_filename = vm["onnx"].as<std::string>(),
+            .dump_filename = vm["dump"].as<std::string>()
         }
     };
 }

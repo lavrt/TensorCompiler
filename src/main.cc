@@ -21,7 +21,7 @@ int main(int argc, const char** argv) {
         onnx::ModelProto model = tc::frontend::LoadOnnxModel(cfg.value().onnx_filename);
         tc::ir::Graph graph = tc::frontend::ImportOnnx(model.graph());
 
-        std::ofstream os{"graph.dot"};
+        std::ofstream os{cfg.value().dump_filename};
         os << tc::viz::GraphDump(graph);
 
         return 0;

@@ -22,6 +22,7 @@ struct CliResult {
 
 struct ProgramConfig {
     std::string onnx_filename;
+    std::string dump_filename;
 };
 
 std::pair<CliResult, std::optional<ProgramConfig>> ParseCli(int argc, const char** argv);
