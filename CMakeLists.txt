@@ -8,26 +8,70 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(protobuf CONFIG REQUIRED)
 find_package(ONNX CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
-add_executable(run
-    src/main.cc
+# tc_core -----------------------------------
+
+add_library(tc_core
     src/frontend/onnx_loader.cc
     src/frontend/onnx_importer.cc
-    src/cli/parse_cli.cc
     src/viz/graph_dump.cc
 )
 
-target_include_directories(run
+target_include_directories(tc_core
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include/cli
         ${CMAKE_SOURCE_DIR}/include/frontend
         ${CMAKE_SOURCE_DIR}/include/ir
         ${CMAKE_SOURCE_DIR}/include/viz
 )
 
-target_link_libraries(run
-    PRIVATE
+target_link_libraries(tc_core
+    PUBLIC
         protobuf::libprotobuf
         onnx::onnx
+)
+
+# program -----------------------------------
+
+add_executable(run
+    src/main.cc
+    src/cli/parse_cli.cc
+)
+
+target_include_directories(run
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/include/cli
+)
+
+target_link_libraries(run
+    PRIVATE
+        tc_core
         Boost::program_options
+)
+
+# tests -------------------------------------
+
+include(CTest)
+enable_testing()
+
+add_executable(tc_tests
+    tests/test_graph.cc
+    tests/test_importer.cc
+)
+
+target_link_libraries(tc_tests
+    PRIVATE
+        tc_core
+        GTest::gtest
+        GTest::gtest_main
+)
+
+target_compile_definitions(tc_tests
+    PRIVATE
+        TC_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+)
+
+add_test(
+    NAME tc.tests
+    COMMAND tc_tests
 )
