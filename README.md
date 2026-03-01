@@ -20,7 +20,7 @@ Supported ops (at least):
 
 ## Requirements
 - Linux
-- CMake >= 3.20
+- CMake >= 3.11
 - Conan 2
 - GCC 14 (`/usr/bin/g++-14`) for building this project
 
@@ -35,9 +35,12 @@ cmake --build --preset conan-release -j
 ## Run
 ```bash
 ./build/run --help
-./build/run --input model.onnx
+./build/run --onnx model.onnx
 ```
 
+## GraphViz dump
+
 ```bash
+./build/run --onnx model.onnx --dump graph.dot
 dot -Tpng graph.dot -o graph.png
 ```
