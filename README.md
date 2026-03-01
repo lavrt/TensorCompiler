@@ -24,6 +24,13 @@ Supported ops (at least):
 - Conan 2
 - GCC 14 (`/usr/bin/g++-14`) for building this project
 
+## Get the code
+
+```bash
+git clone https://github.com/lavrt/TensorCompiler
+cd TensorCompiler
+```
+
 ## Build
 From the project root:
 ```bash
